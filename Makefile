@@ -35,23 +35,23 @@ LDFLAGS += -L$(LIBUV_DIR) -luv
 LIBUV_MAKE_OPT=
 ifneq (, $(findstring linux, $(SYS)))
 TARGET=$(TARGET_BASENAME).so
-LUA_E=luajit
+LUA_E=torch
 LIBUV_MAKE_OPT += CFLAGS=-fPIC
 CFLAGS += -fPIC -D_XOPEN_SOURCE=500 -D_GNU_SOURCE
 CFLAGS += --std=c89 -pedantic -Wall -Wextra -Wno-unused-parameter
 LDFLAGS += -shared -Wl,-soname,$(TARGET) -lpthread -lrt -lm
-LDFLAGS += -llua
+LDFLAGS += -ltorch-lua
 else ifneq (, $(findstring darwin, $(SYS)))
 TARGET=$(TARGET_BASENAME).so
-LUA_E=lua
+LUA_E=torch
 CFLAGS += --std=c89 -pedantic -Wall -Wextra -Wno-unused-parameter
-LDFLAGS += -llua
+LDFLAGS += -ltorch-lua
 LDFLAGS += -lpthread -bundle -undefined dynamic_lookup -framework CoreServices
 else ifneq (, $(findstring mingw, $(SYS)))
 TARGET=$(TARGET_BASENAME).dll
-LUA_E=luajit
+LUA_E=torch
 CFLAGS += --std=gnu89 -D_WIN32_WINNT=0x0600 -I/usr/local/include/luajit-2.0
-LDFLAGS += -L/usr/local/bin -llua51
+LDFLAGS += -L/usr/local/bin -ltorch-lua
 LDFLAGS += -shared -Wl,--export-all-symbols -lws2_32 -lpsapi -liphlpapi
 endif
 
